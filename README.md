@@ -280,12 +280,3 @@ curl -X POST "http://localhost:8080/api/v1/payments" \
 ### 트랜잭션
 
 결제 요청의 재고 차감 → 쿠폰 사용 → 주문 생성 → 결제 시뮬레이션이 단일 트랜잭션으로 처리됩니다. 실패 시 전체 롤백됩니다.
-
----
-
-## Docker 이미지 빌드
-
-```bash
-./gradlew bootJar
-docker build -t shopping-mall-server .
-```
