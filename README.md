@@ -24,20 +24,18 @@ com.imweb.shop
 
 ## 빠른 시작
 
-### Docker Compose (권장)
-
-Colima 미실행 시 자동으로 시작한 후 Docker Compose를 실행합니다.
+### JAR 빌드
 
 ```bash
-./start.sh
+./gradlew clean bootJar
 ```
 
 MySQL과 서버가 함께 실행됩니다. 서버가 준비되면 `http://localhost:8080`으로 접근합니다.
 
-### 로컬 실행
+### 이미지 빌드 + 컨테이너 실행
 
 ```bash
-./gradlew bootRun
+docker-compose up -d --build
 ```
 
 ## 환경변수
