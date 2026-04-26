@@ -1,8 +1,9 @@
-version: '3.8'
-
 services:
   shop-server:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: imweb-test-shop-server
     ports:
       - "8080:8080"
     environment:
