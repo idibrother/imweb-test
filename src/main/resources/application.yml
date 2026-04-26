@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/${DB_NAME:shop}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME:shop}
+    password: ${DB_PASSWORD:shop_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+  jackson:
+    time-zone: UTC
+
+app:
+  jwt:
+    issuer: ${JWT_ISSUER:http://localhost:8080}
+    audience: ${JWT_AUDIENCE:imweb-api}
+    access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:30}
+    private-key-base64: ${JWT_PRIVATE_KEY_BASE64:}
+  security:
+    max-login-attempts: ${MAX_LOGIN_ATTEMPTS:5}
+    lockout-duration-minutes: ${LOCKOUT_DURATION_MINUTES:15}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized

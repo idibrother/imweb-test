@@ -1,0 +1,70 @@
+### 변수 정의
+@host = http://localhost:8080
+
+### 1. 로그인 (Access / Refresh Token 발급)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+%}
+
+
+### 1. 토큰 갱신
+POST {{host}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refresh_token}}"
+}
+
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
+
+### 2. 로그아웃
+POST {{host}}/auth/logout
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refresh_token}}"
+}
+
+
+### 전체 판매 중인 상품 조회 (인증 필요)
+GET {{host}}/api/v1/products/stocks
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 카테고리 필터 + 페이지네이션 (인증 필요)
+GET {{host}}/api/v1/products/stocks?category=FASHION&page=0&size=20
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 결제 요청 (인증 필요)
+POST {{host}}/api/v1/payments
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "items": [
+    { "productId": 1, "quantity": 2 }
+  ],
+  "userCouponIds": [1]
+}
+
+
+### 사용자 쿠폰 목록 조회 (인증 필요)
+GET {{host}}/api/v1/users/1/coupons
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

@@ -1,0 +1,35 @@
+package rules
+dialect "java"
+
+import com.imweb.shop.coupon.drools.CouponDiscountFact
+import com.imweb.shop.coupon.domain.CouponDiscountType
+
+rule "Fixed Amount Discount"
+    salience 10
+    when
+        $f : CouponDiscountFact(
+            discountType == CouponDiscountType.FIXED_AMOUNT,
+            calculatedDiscount == 0
+        )
+    then
+        long discount = Math.min($f.getDiscountValue(), $f.getRemainingAmount());
+        $f.setCalculatedDiscount(discount);
+        update($f);
+end
+
+rule "Fixed Rate Discount"
+    salience 10
+    when
+        $f : CouponDiscountFact(
+            discountType == CouponDiscountType.FIXED_RATE,
+            calculatedDiscount == 0
+        )
+    then
+        long discount = $f.getBaseAmount() * $f.getDiscountValue() / 100L;
+        if ($f.getMaxDiscountAmount() != null) {
+            discount = Math.min(discount, $f.getMaxDiscountAmount());
+        }
+        discount = Math.min(discount, $f.getRemainingAmount());
+        $f.setCalculatedDiscount(discount);
+        update($f);
+end
